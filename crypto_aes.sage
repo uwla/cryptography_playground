@@ -10,9 +10,9 @@ def division(dividend, divisor):
 
 def generate_polynomial(coeff):
     coeff.reverse()
-    p=0
+    p = 0
     for i in range(0, len(coeff)):
-        p+=coeff[i]*x^i
+        p += coeff[i]*x^i
     return p
 
 #          ╭──────────────────────────────────────────────────────────╮
@@ -20,7 +20,7 @@ def generate_polynomial(coeff):
 #          ╰──────────────────────────────────────────────────────────╯
 
 def polynomial_to_decimal(p):
-    F = GF(2^8,'a')
+    F = GF(2^8)
     P = F['x']
     l = P(p).list()
     d = 0
@@ -60,23 +60,23 @@ def hex_to_polynomial(h):
 #          ╰──────────────────────────────────────────────────────────╯
 
 def aes_subbytes(b1,b2):
-    F = GF(2^8,'a')
-    R = F['x']
-    m = R(x^8+x^4+x^3+x+1)
+    F = GF(2^8)
+    P = F['x']
+    m = P(x^8+x^4+x^3+x+1)
     p1 = hex_to_polynomial(b1)
     p2 = hex_to_polynomial(b2)
-    p = R(p1*p2)
+    p = P(p1*p2)
     return p.mod(m)
 
-def aes_mix_column_vectors(ha,hb):
-    a3=ha[0:2]
-    a2=ha[2:4]
-    a1=ha[4:6]
-    a0=ha[6:8]
-    b3=hb[0:2]
-    b2=hb[2:4]
-    b1=hb[4:6]
-    b0=hb[6:8]
+def aes_mix_column_vectors(ha, hb):
+    a3 = ha[0:2]
+    a2 = ha[2:4]
+    a1 = ha[4:6]
+    a0 = ha[6:8]
+    b3 = hb[0:2]
+    b2 = hb[2:4]
+    b1 = hb[4:6]
+    b0 = hb[6:8]
     a0b0 = polynomial_to_decimal(aes_subbytes(a0,b0))
     a0b1 = polynomial_to_decimal(aes_subbytes(a0,b1))
     a0b2 = polynomial_to_decimal(aes_subbytes(a0,b2))
@@ -101,10 +101,10 @@ def aes_mix_column_vectors(ha,hb):
     c1 = a1b0^^a0b1
     c0 = a0b0
     C = generate_polynomial([c6,c5,c4,c3,c2,c1,c0])
-    r3 =a0b3^^a1b2^^a2b1^^a3b0
-    r2 =a0b2^^a1b1^^a2b0^^a3b3
-    r1 =a0b1^^a1b0^^a2b3^^a3b2
-    r0 =a0b0^^a1b3^^a2b2^^a3b1
+    r3 = a0b3^^a1b2^^a2b1^^a3b0
+    r2 = a0b2^^a1b1^^a2b0^^a3b3
+    r1 = a0b1^^a1b0^^a2b3^^a3b2
+    r0 = a0b0^^a1b3^^a2b2^^a3b1
     R = generate_polynomial([r3,r2,r1,r0])
     return C,R
 
@@ -148,8 +148,8 @@ def p2h(p):
     return p2hex(p)
 
 # aes utils
-def subb(b1,b2):
-    return aes_subbytes(b1,b2)
+def subb(b1, b2):
+    return aes_subbytes(b1, b2)
 
-def mixcol(ha,hb):
-    return aes_mix_column_vectors(ha,hb)
+def mixcol(ha, hb):
+    return aes_mix_column_vectors(ha, hb)
