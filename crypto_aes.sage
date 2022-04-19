@@ -20,7 +20,7 @@ def generate_polynomial(coeff):
 #          ╰──────────────────────────────────────────────────────────╯
 
 def polynomial_to_decimal(p):
-    F = GF(2^8)
+    F = GF(2^8,'a')
     P = F['x']
     l = P(p).list()
     d = 0
