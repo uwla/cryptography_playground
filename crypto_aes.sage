@@ -105,7 +105,7 @@ def aes_mix_column_vectors(ha,hb):
     r2 =a0b2^^a1b1^^a2b0^^a3b3
     r1 =a0b1^^a1b0^^a2b3^^a3b2
     r0 =a0b0^^a1b3^^a2b2^^a3b1
-    R = generate_polynomial([r3,r2,r1,0])
+    R = generate_polynomial([r3,r2,r1,r0])
     return C,R
 
 #          ╭──────────────────────────────────────────────────────────╮
