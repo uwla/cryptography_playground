@@ -1,4 +1,7 @@
-#!/bin/sage
+#!/usr/bin/sage
+
+# This is contains partial implementation of some steps in AES.
+# I used it mainly for aiding me with criptography class exercises.
 
 #          ╭──────────────────────────────────────────────────────────╮
 #          │ GENERAL POLYNOMIAL UTILS                                 │
@@ -153,3 +156,6 @@ def subb(b1, b2):
 
 def mixcol(ha, hb):
     return aes_mix_column_vectors(ha, hb)
+
+
+# vim:filetype=sage:syntax=python:tabstop=4:softtabstop=4:shiftwidth=4
