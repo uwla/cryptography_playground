@@ -1,5 +1,5 @@
 #!/usr/usr/bin/python33
-from cripto_utils import gdc, modinv, exp_mod, prime_gt, prime_lt
+from cripto_utils import exp_mod, gdc, mod_inv, prime_gt, prime_lt
 from random import randint
 
 def rsa_enc(x, pubkey, n):
@@ -20,7 +20,7 @@ def rsa_gen(seclevel=1234):
     s = randint(2, phi_n)
     while gdc(s, phi_n) != 1:
         s = randint(2, phi_n)
-    p = modinv(s, phi_n)
+    p = mod_inv(s, phi_n)
     return (s, p, n)
 
 def test_rsa():

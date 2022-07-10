@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from cripto_utils import prime_gt, exp_mod, modinv, rand_inv
+from cripto_utils import exp_mod, mod_inv, prime_gt, rand_inv
 from random import randint
 
 def el_gamal_genkeys(seclevel=4096):
@@ -20,13 +20,13 @@ def el_gamal_dec(keys, enc):
     (p, g, t), s = keys
     y, z = enc
     yS = exp_mod(y, s, p)
-    x = (z * modinv(yS, p)) % p
+    x = (z * mod_inv(yS, p)) % p
     return x
 
 def el_gamal_sign(keys, x):
     (p, g, t), s = keys
     k = rand_inv(p-1) # nonce
-    kinv = modinv(k, p-1)
+    kinv = mod_inv(k, p-1)
     y = exp_mod(g, k, p)
     z = ((x - s*y) *kinv) % (p-1)
     return (y, z)

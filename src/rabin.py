@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from cripto_utils import prime_between, exp_mod, modinv
+from cripto_utils import exp_mod, mod_inv, prime_between
 from random import randint
 
 # seckey
@@ -15,8 +15,8 @@ n = q*r
 m = randint(1, n-1)
 c = exp_mod(m, 2, n)
 
-qinv = modinv(q, r)
-rinv = modinv(r, q)
+qinv = mod_inv(q, r)
+rinv = mod_inv(r, q)
 x2 = exp_mod(c, (q+1)/4, q)
 x1 = exp_mod(c, (r+1)/4, r)
 
