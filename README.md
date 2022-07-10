@@ -1,8 +1,13 @@
-# SAGEMATH UTILS
+# CRIPTOGRAPHY PLAYGROUND
 
-Some util libraries for working with sagemath on different topics.
+This repository contains some python scripts that implement some
+criptography algorithms.
 
-## USE
+This is for learning purposes; do not use it in production!
+
+## USING SAGEMATH
+
+Here are instructions for working specifically with sagemath.
 
 First, install sagemath. Then, to use it within python (or sage itself):
 
