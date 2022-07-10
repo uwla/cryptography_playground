@@ -56,6 +56,8 @@ def exp(m, e):
 def exp_mod(m, e, n):
     if e == 0:
         return 1
+    if e < 0:
+        return mod_inv(exp_mod(m, -e, n), n)
     if e % 2 == 1:
         return (m * exp_mod(m, (e-1)/2, n)**2) % n
     else:
@@ -147,6 +149,8 @@ def factors(x):
         f.append([x, 1])
     return f
 
+def bits(x):
+    return int(0.5+log2(x))
+
 def concat(a, b):
-    bits = int(0.5+log2(b))
-    return (a<<bits) + b
+    return a<<bits(b) + b
