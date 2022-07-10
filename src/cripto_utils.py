@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from random import randint
+from math import log2
 
 def gdc(a, b):
     if b > a:
@@ -9,7 +10,7 @@ def gdc(a, b):
         return b
     return gdc(b, r)
 
-def modinv(n, m):
+def mod_inv(n, m):
     if n > m:
         n = n % m
     if gdc(n, m) != 1:
@@ -26,11 +27,23 @@ def modinv(n, m):
         r2, x2, y2 = r1, x1, y1
         r1, x1, y1 = r, x, y
 
-def rand_inv(n):
-    k = randint(2, n)
+def rand_inv(n, kmin=2):
+    k = randint(kmin, n)
     while gdc(k, n) != 1:
-        k = randint(2, n)
+        k = randint(kmin, n)
     return k
+
+def crt(p, r):
+    M = 1
+    n = len(p)
+    for i in range(n):
+        M = M * p[i]
+    x = 0
+    for i in range(n):
+        m = int(M/p[i])
+        m_inv = mod_inv(m, p[i])
+        x = (x + m * m_inv * r[i]) % M
+    return x
 
 def exp(m, e):
     if e == 0:
@@ -74,20 +87,39 @@ def is_prime(x):
 def gen_primes_untill(n):
     last_prime = primes[-1]
     nextn = last_prime + 2
-    while nextn <= n:
+    while primes[-1] < n:
         if is_prime(nextn):
             primes.append(nextn)
         nextn += 2
 
+def gen_first_primes(n):
+    nextn = primes[-1] + 2
+    while len(primes) < n:
+        if is_prime(nextn):
+            primes.append(nextn)
+        nextn += 2
+
+def prime_n(n):
+    gen_first_primes(n)
+    return primes[n-1]
+
 def prime_gt(x):
     gen_primes_untill(x)
     ind = binary_search(primes, x)
-    return primes[ind]
+    if primes[ind] > x:
+        return primes[ind]
+    else:
+        return primes[ind+1]
 
 def prime_lt(x):
+    if x == 2:
+        raise Exception("no prime less than 2")
     gen_primes_untill(x)
     ind = binary_search(primes, x)
-    return primes[ind-1]
+    if primes[ind] < x:
+        return primes[ind]
+    else:
+        return primes[ind-1]
 
 def prime_between(a, b):
     if a>b:
@@ -114,3 +146,7 @@ def factors(x):
     if x != 1:
         f.append([x, 1])
     return f
+
+def concat(a, b):
+    bits = int(0.5+log2(b))
+    return (a<<bits) + b
