@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from cripto_utils import exp_mod, factors, mod_inv, prime_between, prime_n, rand_inv
+from cripto_utils import exp_mod, mod_inv, prime_between, prime_n, rand_inv
 from random import randint
 
 p = prime_between(1000, 1500)
@@ -15,9 +15,9 @@ def f(x):
 
 # CA -> Alice: sA
 # CA -> public: iA, jA
-iA = randint(2, 1000)               # Alice`s identity
-jA = f(iA)                          # Alice`s pubkey
-sA = mod_inv(exp_mod(jA, s, n), n)  # Alice`s seckey
+iA = randint(2, 1000)     # Alice`s identity
+jA = f(iA)                # Alice`s pubkey
+sA = exp_mod(jA, -s, n)   # Alice`s seckey
 
 # Alice -> Bob: x
 r = randint(1, n)     # nonce

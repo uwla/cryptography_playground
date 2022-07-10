@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from cripto_utils import concat, crt, exp_mod, factors, mod_inv, prime_gt, prime_lt, rand_inv
+from cripto_utils import concat, crt, exp_mod, mod_inv, prime_gt, prime_lt, rand_inv
 from random import randint
 
 # placeholder/stub for an actual hashing function
