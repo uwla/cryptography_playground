@@ -4,7 +4,7 @@ from random import randint
 
 p = prime_gt(15000)
 q = factors(p-1)[-1][0]
-g = randint(2, p)
+g = randint(2, p-1)
 b = exp_mod(g, int((p-1)/q), p)
 t = randint(1, bits(q))
 
