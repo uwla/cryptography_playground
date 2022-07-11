@@ -19,8 +19,8 @@ def el_gamal_enc(pkey, x):
 def el_gamal_dec(keys, enc):
     (p, g, t), s = keys
     y, z = enc
-    yS = exp_mod(y, s, p)
-    x = (z * mod_inv(yS, p)) % p
+    y_S = exp_mod(y, -s, p)
+    x = (z * y_S) % p
     return x
 
 def el_gamal_sign(keys, x):
