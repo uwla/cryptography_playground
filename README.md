@@ -1,12 +1,13 @@
-# CRIPTOGRAPHY PLAYGROUND
+# CRYPTOGRAPHY PLAYGROUND
 
 This repository contains some python scripts that implement some
-criptography algorithms.
+cryptography algorithms.
 
 This is for learning purposes; do not use it in production!
 
 ## USING SAGEMATH
 
+Most scripts are in python, but there are also sage scripts.
 Here are instructions for working specifically with sagemath.
 
 First, install sagemath. Then, to use it within python (or sage itself):
