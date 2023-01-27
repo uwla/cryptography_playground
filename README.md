@@ -26,7 +26,3 @@ import <module>
 ## LICENSE
 
 MIT
-
-## AUTHOR
-
-Andre Souza Abreu
