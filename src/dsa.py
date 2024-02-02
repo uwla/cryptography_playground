@@ -1,52 +1,56 @@
 #!/usr/bin/python3
 from cripto_utils import exp_mod, factors, mod_inv, prime_gt
+from cripto_types import SignatureScheme
 from random import randint
 
-def dsa_genkeys(seclevel=12345):
-    # public primes
-    p = prime_gt(seclevel)
-    q = factors(p-1)[-1][0] # pick last factor of p-1
+class DSA(SignatureScheme):
+    def generate_public_parameters(self, sec_level):
+        # generate public primes
+        p =  prime_gt(sec_level)
+        q = factors(p - 1)[-1][0]  # pick last factor of p-1
 
+        # public generator
+        g = 1
+        while g == 1:
+            h = randint(2, p - 2)
+            g = exp_mod(h, int((p - 1) / q), p)
 
-    # generator
-    g = 1
-    while g == 1:
-        h = randint(2, p-2)
-        g = exp_mod(h, int((p-1)/q), p)
+        # set the public parameters
+        self.public_params = (p, q, g)
 
-    # seckey
-    s = randint(2, q-1)
+    def generate_secrete_key(self):
+        p, q, g = self.get_public_params()
+        s = randint(2, q - 1)
+        return s
+    
+    def derive_public_key(self, sec_key):
+        p, q, g = self.get_public_params()
+        t = exp_mod(g, sec_key, p)
+        return t
 
-    # another pubkey
-    t = exp_mod(g, s, p)
+    def sign(self, msg, sec_key):
+        x = msg
+        s = sec_key
+        p, q, g = self.get_public_params()
+        t = self.derive_public_key(s)
+        k = randint(2, q - 1)
+        k_inv = mod_inv(k, q)
+        c = exp_mod(g, k, p) % q
+        d = ((x + s * c) * k_inv) % q
+        return (c, d)
 
-    return ((p, q, g, t), s)
+    def verify(self, msg, pub_key, signature):
+        x = msg
+        t = pub_key
+        p, q, g = self.get_public_params()
+        c, d = signature
+        d_inv = mod_inv(d, q)
+        e1 = (x * d_inv) % q
+        e2 = (c * d_inv) % q
+        a = exp_mod(g, e1, p) * exp_mod(t, e2, p)
+        b = (a % p) % q
+        return b == c
 
-def dsa_sign(keys, x):
-    (p, q, g, t), s = keys
-    k = randint(2, q-1)
-    kinv = mod_inv(k, q)
-    c = exp_mod(g, k, p) % q
-    d = ((x + s*c)*kinv) % q
-    return (c, d)
-
-def dsa_verify(pkey, x, signature):
-    p, q, g, t = pkey
-    c, d = signature
-    dinv = mod_inv(d, q)
-    e1 = (x*dinv) % q
-    e2 = (c*dinv) % q
-    a = exp_mod(g, e1, p) * exp_mod(t, e2, p)
-    b = ((a%p)%q)
-    return b == c
-
-def test_dsa_signature():
-    keys = dsa_genkeys()
-    pkey = keys[0]
-    p = pkey[0]
-    x = randint(1,p-1)
-    signature = dsa_sign(keys, x)
-    verification = dsa_verify(pkey, x, signature)
-    print(verification, x, signature)
-
-test_dsa_signature()
+if __name__ == "__main__":
+    dsa_scheme = DSA(10000)
+    dsa_scheme.test_signature()
