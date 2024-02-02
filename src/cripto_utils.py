@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from random import randint
 from math import log2
 
@@ -27,10 +26,10 @@ def mod_inv(n, m):
         r2, x2, y2 = r1, x1, y1
         r1, x1, y1 = r, x, y
 
-def rand_inv(n, kmin=2):
-    k = randint(kmin, n)
+def rand_inv(n, k_min=2):
+    k = randint(k_min, n)
     while gdc(k, n) != 1:
-        k = randint(kmin, n)
+        k = randint(k_min, n)
     return k
 
 def crt(p, r):
@@ -77,67 +76,67 @@ def binary_search(array, x):
     else:
         return start
 
-primes = [2, 3]
+_primes = [2, 3]
 def is_prime(x):
-    for prime in primes:
+    for prime in _primes:
         if x == prime:
             return True
         if x % prime == 0:
             return False
     return True
 
-def gen_primes_untill(n):
-    last_prime = primes[-1]
-    nextn = last_prime + 2
-    while primes[-1] < n:
-        if is_prime(nextn):
-            primes.append(nextn)
-        nextn += 2
+def gen_primes_until(n):
+    last_prime = _primes[-1]
+    next_n = last_prime + 2
+    while _primes[-1] < n:
+        if is_prime(next_n):
+            _primes.append(next_n)
+        next_n += 2
 
 def gen_first_primes(n):
-    nextn = primes[-1] + 2
-    while len(primes) < n:
-        if is_prime(nextn):
-            primes.append(nextn)
-        nextn += 2
+    next_n = _primes[-1] + 2
+    while len(_primes) < n:
+        if is_prime(next_n):
+            _primes.append(next_n)
+        next_n += 2
 
 def prime_n(n):
     gen_first_primes(n)
-    return primes[n-1]
+    return _primes[n-1]
 
 def prime_gt(x):
-    gen_primes_untill(x)
-    ind = binary_search(primes, x)
-    if primes[ind] > x:
-        return primes[ind]
+    gen_primes_until(x)
+    ind = binary_search(_primes, x)
+    if _primes[ind] > x:
+        return _primes[ind]
     else:
-        return primes[ind+1]
+        return _primes[ind+1]
 
 def prime_lt(x):
     if x == 2:
         raise Exception("no prime less than 2")
-    gen_primes_untill(x)
-    ind = binary_search(primes, x)
-    if primes[ind] < x:
-        return primes[ind]
+    gen_primes_until(x)
+    ind = binary_search(_primes, x)
+    if _primes[ind] < x:
+        return _primes[ind]
     else:
-        return primes[ind-1]
+        return _primes[ind-1]
 
 def prime_between(a, b):
     if a>b:
         raise Exception("invalid range")
-    gen_primes_untill(b)
-    indA = binary_search(primes, a)
-    indB = binary_search(primes, b)
+    gen_primes_until(b)
+    indA = binary_search(_primes, a)
+    indB = binary_search(_primes, b)
     ind = randint(indA, indB)
-    return primes[ind]
+    return _primes[ind]
 
 def factors(x):
-    sqrtx = int(0.5+x**(0.5))
-    gen_primes_untill(sqrtx)
+    sqrt_x = int(0.5+x**(0.5))
+    gen_primes_until(sqrt_x)
     f = []
-    for p in primes:
-        if p > sqrtx:
+    for p in _primes:
+        if p > sqrt_x:
             break
         e = 0
         while x%p == 0:
