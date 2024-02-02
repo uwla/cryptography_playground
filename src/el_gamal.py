@@ -1,60 +1,63 @@
 #!/usr/bin/python
 from cripto_utils import exp_mod, mod_inv, prime_gt, rand_inv
+from cripto_types import SignatureScheme, EncryptionScheme
 from random import randint
 
-def el_gamal_genkeys(seclevel=4096):
-    p = prime_gt(seclevel)  # pub key
-    g = randint(2, p-1)     # pub key
-    s = randint(2, p-2)     # sec key
-    t = exp_mod(g, s, p)    # pub key
-    return ((p, g, t), s)
+class ElGamal(SignatureScheme, EncryptionScheme):
+    def generate_public_parameters(self, sec_level):
+        p = prime_gt(sec_level)
+        g = randint(2, p - 1)
+        self.public_params = (p, g)
+        
 
-def el_gamal_enc(pkey, x):
-    p, g, t = pkey
-    k = randint(2, p-1) # nonce
-    y = exp_mod(g, k, p)
-    z = (exp_mod(t, k, p) * x) % p
-    return (y, z)
+    def generate_secrete_key(self):
+        p, g = self.get_public_params()
+        s = randint(2, p - 2)  # sec key
+        return s
+    
+    def derive_public_key(self, sec_key):
+        p, g = self.get_public_params()
+        t = exp_mod(g, sec_key, p)
+        return t
 
-def el_gamal_dec(keys, enc):
-    (p, g, t), s = keys
-    y, z = enc
-    y_S = exp_mod(y, -s, p)
-    x = (z * y_S) % p
-    return x
+    def encrypt(self, msg, pub_key):
+        x = msg
+        t = pub_key
+        p, g = self.get_public_params()
+        k = randint(2, p - 1) # nonce
+        y = exp_mod(g, k, p)
+        z = (exp_mod(t, k, p) * x) % p
+        return (y, z)
 
-def el_gamal_sign(keys, x):
-    (p, g, t), s = keys
-    k = rand_inv(p-1) # nonce
-    kinv = mod_inv(k, p-1)
-    y = exp_mod(g, k, p)
-    z = ((x - s*y) *kinv) % (p-1)
-    return (y, z)
+    def decrypt(self, cipher, sec_key):
+        s = sec_key
+        t = self.derive_public_key(s)
+        p, g = self.get_public_params()
+        y, z = cipher
+        msg = (z * exp_mod(y, -s, p)) % p
+        return msg
 
-def el_gamal_verify(pkey, x, signature):
-    p, g, t = pkey
-    y, z = signature
-    a = (exp_mod(t, y, p) * exp_mod(y, z, p)) % p
-    b = exp_mod(g, x, p)
-    return a == b
+    def sign(self, msg, sec_key):
+        x = msg
+        s = sec_key
+        t = self.derive_public_key(s)
+        p, g = self.get_public_params()
+        k = rand_inv(p - 1)  # nonce
+        k_inv = mod_inv(k, p - 1)
+        y = exp_mod(g, k, p)
+        z = ((x - s * y) * k_inv) % (p - 1)
+        return (y, z)
 
-def test_el_gamal_encdec():
-    keys = el_gamal_genkeys()
-    pkey = keys[0]
-    p = pkey[0]
-    x = randint(1,p-1)
-    enc = el_gamal_enc(pkey, x)
-    dec = el_gamal_dec(keys, enc)
-    print(x==dec, x, enc, dec)
+    def verify(self, msg, pub_key, signature):
+        x = msg
+        t = pub_key
+        p, g = self.get_public_params()
+        y, z = signature
+        a = (exp_mod(t, y, p) * exp_mod(y, z, p)) % p
+        b = exp_mod(g, x, p)
+        return a == b
 
-def test_el_gamal_signature():
-    keys = el_gamal_genkeys()
-    pkey = keys[0]
-    p = pkey[0]
-    x = randint(1,p-1)
-    signature = el_gamal_sign(keys, x)
-    verification = el_gamal_verify(pkey, x, signature)
-    print(verification, x, signature)
-
-test_el_gamal_encdec()
-test_el_gamal_signature()
+if __name__ == "__main__":
+    el_gamal_scheme = ElGamal(10000)
+    el_gamal_scheme.test_signature()
+    el_gamal_scheme.test_encryption()
