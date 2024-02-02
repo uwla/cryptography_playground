@@ -1,34 +1,38 @@
-#!/usr/usr/bin/python33
+#!/usr/bin/python3
 from cripto_utils import exp_mod, gdc, mod_inv, prime_gt, prime_lt
+from cripto_types import EncryptionScheme
 from random import randint
 
-def rsa_enc(x, pubkey, n):
-    if x >= n:
-        raise Exception("x cannot be greater than pubkey")
-    return exp_mod(x, pubkey, n)
+class RSA(EncryptionScheme):
+    def encrypt(self, msg, pub_key):
+        p, n = pub_key
+        x = msg
+        if x >= n:
+            raise Exception("Message cannot be greater than pubkey")
+        return exp_mod(x, p, n)
 
-def rsa_dec(y, seckey, n):
-    if y >= n:
-        raise Exception("x cannot be greater than pubkey")
-    return exp_mod(y, seckey, n)
+    def decrypt(self, msg, sec_key):
+        s, n, phi_n = sec_key
+        x = msg
+        if x >= n:
+            raise Exception("Message cannot be greater than pubkey")
+        return exp_mod(x, s, n)
 
-def rsa_gen(seclevel=1234):
-    q = prime_gt(seclevel)
-    r = prime_lt(seclevel)
-    n = q*r
-    phi_n = (q-1)*(r-1)
-    s = randint(2, phi_n)
-    while gdc(s, phi_n) != 1:
+    def generate_secrete_key(self):
+        q = prime_gt(self.sec_level)
+        r = prime_lt(self.sec_level)
+        n = q*r
+        phi_n = (q-1)*(r-1)
         s = randint(2, phi_n)
-    p = mod_inv(s, phi_n)
-    return (s, p, n)
+        while gdc(s, phi_n) != 1:
+            s = randint(2, phi_n)
+        return (s, n, phi_n)
+    
+    def derive_public_key(self, sec_key):
+        s, n, phi_n = sec_key
+        p = mod_inv(s, phi_n)
+        return (p, n)
 
-def test_rsa():
-    s, p, n = rsa_gen()
-    x = randint(1, p-1)
-    y = rsa_enc(x, p, n)
-    xd = rsa_dec(y, s, n)
-    print(xd==x, f"(s={s}, p={p}, n={n}) x={x} y={y} xdec={xd}")
-
-for _ in range(5):
-    test_rsa()
+if __name__ == "__main__":
+    rsa_scheme = RSA(1000)
+    rsa_scheme.test_encryption()
