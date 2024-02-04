@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from cripto_utils import concat, crt, exp_mod, mod_inv, prime_gt, prime_lt, rand_inv
-from cripto_types import SignatureScheme
+from crypto_utils import concat, crt, exp_mod, mod_inv, prime_gt, prime_lt, rand_inv
+from crypto_types import SignatureScheme
 from random import randint
 
 class GuillouQuisquater(SignatureScheme):

@@ -1,5 +1,5 @@
-from cripto_utils import concat, exp_mod, prime_gt, prime_lt, rand_inv, randint
-from cripto_types import SignatureScheme
+from crypto_utils import concat, exp_mod, prime_gt, prime_lt, rand_inv, randint
+from crypto_types import SignatureScheme
 from hashlib import sha256
 
 class FeigeFiatShamir(SignatureScheme):

@@ -1,4 +1,4 @@
-from cripto_utils import randint
+from crypto_utils import randint
 from abc import abstractmethod
 
 class KeyGenerationScheme():

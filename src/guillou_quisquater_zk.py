@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from cripto_utils import exp_mod, mod_inv, prime_between, prime_n, rand_inv
+from crypto_utils import exp_mod, mod_inv, prime_between, prime_n, rand_inv
 from random import randint
 
 p = prime_between(1000, 1500)

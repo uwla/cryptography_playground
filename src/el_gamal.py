@@ -1,6 +1,6 @@
 #!/usr/bin/python
-from cripto_utils import exp_mod, mod_inv, prime_gt, rand_inv
-from cripto_types import SignatureScheme, EncryptionScheme
+from crypto_utils import exp_mod, mod_inv, prime_gt, rand_inv
+from crypto_types import SignatureScheme, EncryptionScheme
 from random import randint
 
 class ElGamal(SignatureScheme, EncryptionScheme):

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from cripto_utils import exp_mod, prime_between
+from crypto_utils import exp_mod, prime_between
 from random import randint
 
 def gen_key_pair(secmin=1000, secmax=10000):

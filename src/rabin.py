@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from cripto_utils import exp_mod, mod_inv, prime_between
+from crypto_utils import exp_mod, mod_inv, prime_between
 from random import randint
 
 # seckey

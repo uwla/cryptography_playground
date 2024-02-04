@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from cripto_utils import bits, exp_mod, factors, mod_inv, prime_gt, rand_inv
+from crypto_utils import bits, exp_mod, factors, mod_inv, prime_gt, rand_inv
 from random import randint
 
 p = prime_gt(15000)

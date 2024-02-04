@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from cripto_utils import exp_mod, factors, mod_inv, prime_gt
-from cripto_types import SignatureScheme
+from crypto_utils import exp_mod, factors, mod_inv, prime_gt
+from crypto_types import SignatureScheme
 from random import randint
 
 class DSA(SignatureScheme):

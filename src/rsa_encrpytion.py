@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from cripto_utils import exp_mod, gdc, mod_inv, prime_gt, prime_lt
-from cripto_types import EncryptionScheme
+from crypto_utils import exp_mod, gdc, mod_inv, prime_gt, prime_lt
+from crypto_types import EncryptionScheme
 from random import randint
 
 class RSA(EncryptionScheme):
