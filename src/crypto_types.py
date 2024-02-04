@@ -62,3 +62,22 @@ class EncryptionScheme(KeyGenerationScheme):
         decrypted = self.decrypt(encrypted, sec_key)
         print((pub_key, sec_key), msg, encrypted, decrypted)
         assert decrypted == msg
+
+class KeyAgreementProtocol(KeyGenerationScheme):
+    @abstractmethod
+    def agree_shared(self, sender_key, receiver_pub_data):
+        pass
+
+    @abstractmethod
+    def generate_pub_data(self, key):
+        pass
+
+    def test_key_agreement(self):
+        key_A = self.generate_key()
+        key_B = self.generate_key()
+        pub_data_A = self.generate_pub_data(key_A)
+        pub_data_B = self.generate_pub_data(key_B)
+        shared_A = self.agree_shared(key_A, pub_data_B)
+        shared_B = self.agree_shared(key_A, pub_data_B)
+        print(shared_A, shared_B)
+        assert shared_A == shared_B
