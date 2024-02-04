@@ -1,19 +1,30 @@
 #!/usr/bin/python3
-from crypto_utils import exp_mod, prime_between
+from crypto_utils import exp_mod, prime_gt
+from crypto_types import KeyAgreementProtocol
 from random import randint
 
-p = prime_between(1000, 10000)
-g = randint(2, p-1)
+class DiffieHellman(KeyAgreementProtocol):
+    def generate_public_parameters(self, sec_level):
+        p = prime_gt(sec_level)
+        g = randint(2, p-1)
+        self.public_params = (p, g)
 
-sA = randint(2, p-2)
-tA = exp_mod(g, sA, p)
-sB = randint(2, p-2)
-tB = exp_mod(g, sB, p)
+    def generate_key(self):
+        p, g = self.get_public_params()
+        s = randint(2, p-2)
+        t = exp_mod(g, s, p)
+        return (t, s)
 
-kA = exp_mod(tB, sA, p) 
-kB = exp_mod(tA, sB, p) 
+    def generate_pub_data(self, key):
+        pub_key, sec_key = key
+        return pub_key
 
-if kA != kB:
-    raise Exception("something went wrong")
+    def agree_shared(self, sender_key, receiver_pub_data):
+        p = self.get_public_params()[0]
+        s = sender_key[1]
+        t = receiver_pub_data
+        return exp_mod(t, s, p)
 
-kAB = kA
+if __name__ == "__main__":
+    diffie_hellman = DiffieHellman(10000)
+    diffie_hellman.test_key_agreement()
